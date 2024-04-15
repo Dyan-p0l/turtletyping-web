@@ -13,9 +13,9 @@ const Stats = ({
 }) => {
   return (
     <>
-      <h3>{countDown} s </h3>
+      <h3 className="time-text">TIME: {countDown} s </h3>
       <Box display="flex" flexDirection="row">
-        <h3>WPM: {Math.round(wpm)}</h3>
+        {status === "finished" || countDown === 0 ? (<h3>WPM: {Math.round(wpm)}</h3>) : null}
         {status === "finished" && (
           <h4>Accuracy: {Math.round(statsCharCount[0])} %</h4>
         )}
@@ -28,12 +28,7 @@ const Stats = ({
             }
           >
             <h4>
-              Char:{" "}
-              <span className="correct-char-stats">{statsCharCount[1]}</span>/
-              <span className="incorrect-char-stats">{statsCharCount[2]}</span>/
-              <span className="missing-char-stats">{statsCharCount[3]}</span>/
-              <span className="correct-char-stats">{statsCharCount[4]}</span>/
-              <span className="incorrect-char-stats">{statsCharCount[5]}</span>
+              
             </h4>
           </Tooltip>
         )}

@@ -4,136 +4,94 @@ import {
 import {
   ENGLISH_MODE,
   DEFAULT_WORDS_COUNT,
+  C_MODE,
+  CPP_MODE,
+  JAVA_MODE,
+  PYTHON_MODE
 } from "../constants/Constants";
 import { randomIntFromRange } from "./randomUtils";
 import {
-  generateRandomNumChras,
-  generateRandomSymbolChras,
-} from "./randomCharsGenerator";
-import {
-  VOCAB_DICTIONARIES,
-  DICTIONARY_SOURCE_CATALOG,
-} from "../constants/DictionaryConstants";
+  C_SYNTAX,
+  CPP_SYNTAX,
+  JAVA_SYNTAX,
+  PYTHON_SYNTAX
+} from "../constants/SyntaxMostCommon";
 
 const wordsGenerator = (
   wordsCount,
-  difficulty,
-  languageMode,
-  numberAddOn,
-  symbolAddOn
+  languageMode
 ) => {
   if (languageMode === ENGLISH_MODE) {
-    if (difficulty === DEFAULT_DIFFICULTY) {
-      const EnglishWordList = [];
-      for (let i = 0; i < DEFAULT_WORDS_COUNT; i++) {
-        const rand = randomIntFromRange(0, 550);
-        let wordCandidate = COMMON_WORDS[rand].val;
-        if (numberAddOn) {
-          wordCandidate = wordCandidate + generateRandomNumChras(1, 2);
-        }
-        if (symbolAddOn) {
-          wordCandidate = wordCandidate + generateRandomSymbolChras(1, 1);
-        }
-        EnglishWordList.push({ key: wordCandidate, val: wordCandidate });
-      }
-      return EnglishWordList;
+    const EnglishWordList = [];
+    for (let i = 0; i < DEFAULT_WORDS_COUNT; i++) {
+      const rand = randomIntFromRange(0, 550);
+      let wordCandidate = COMMON_WORDS[rand].val;
+      EnglishWordList.push({ key: wordCandidate, val: wordCandidate });
     }
-
-    // hard
-    const randomWordsGenerated = randomWords({
-      exactly: wordsCount,
-      maxLength: 7,
-    });
-    const words = [];
-    for (let i = 0; i < wordsCount; i++) {
-      let wordCandidate = randomWordsGenerated[i];
-      if (numberAddOn) {
-        wordCandidate = wordCandidate + generateRandomNumChras(1, 2);
-      }
-      if (symbolAddOn) {
-        wordCandidate = wordCandidate + generateRandomSymbolChras(1, 1);
-      }
-      words.push({ key: wordCandidate, val: wordCandidate });
-    }
-    return words;
+    return EnglishWordList;
   }
   return ["something", "went", "wrong"];
 };
 
-const chineseWordsGenerator = (
-  difficulty,
-  languageMode,
-  numberAddOn,
-  symbolAddOn
+const CwordsGenerator = (
+  wordsCount,
+  languageMode
+) => {  
+  if (languageMode === C_MODE){
+    const CwordsList = [];
+    for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){
+      const rand = randomIntFromRange(0, 53);
+      let CwordCandidate = C_SYNTAX[rand].val;
+      CwordsList.push({ key: CwordCandidate, val: CwordCandidate })
+    }
+    return CwordsList;
+  }
+  return ["something", "went", "wrong"];
+};
+
+const CppwordsGenerator = (
+  wordsCount,
+  languageMode
 ) => {
-  if (languageMode === CHINESE_MODE) {
-    if (difficulty === DEFAULT_DIFFICULTY) {
-      const ChineseWordList = [];
-      for (let i = 0; i < DEFAULT_WORDS_COUNT; i++) {
-        const rand = randomIntFromRange(0, 5000);
-        if (COMMON_CHINESE_WORDS[rand] && COMMON_CHINESE_WORDS[rand].val) {
-          let wordCandidateKey = COMMON_CHINESE_WORDS[rand].key;
-          let wordCandidateVal = COMMON_CHINESE_WORDS[rand].val;
-          if (numberAddOn) {
-            const generatedNumber = generateRandomNumChras(1, 2);
-            wordCandidateKey = wordCandidateKey + generatedNumber;
-            wordCandidateVal = wordCandidateVal + generatedNumber;
-          }
-          if (symbolAddOn) {
-            const generatedSymbol = generateRandomSymbolChras(1, 1);
-            wordCandidateKey = wordCandidateKey + generatedSymbol;
-            wordCandidateVal = wordCandidateVal + generatedSymbol;
-          }
-
-          ChineseWordList.push({
-            key: wordCandidateKey,
-            val: wordCandidateVal,
-          });
-        }
-      }
-
-      return ChineseWordList;
+  if (languageMode === CPP_MODE){
+    const CppWordsList = [];
+    for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){
+      const rand = randomIntFromRange(0, 53);
+      let CppwordCandidate = CPP_SYNTAX[rand].val;
     }
+    return CppWordsList;
+  }
+  return ["something", "went", "wrong"];
+}
 
-    const ChineseIdiomsList = [];
-    for (let i = 0; i < DEFAULT_WORDS_COUNT; i++) {
-      const rand = randomIntFromRange(0, 5000);
-      if (
-        COMMON_CHINESE_IDIOMS_WORDS[rand] &&
-        COMMON_CHINESE_IDIOMS_WORDS[rand].val
-      ) {
-        let wordCandidateKey = COMMON_CHINESE_IDIOMS_WORDS[rand].key;
-        let wordCandidateVal = COMMON_CHINESE_IDIOMS_WORDS[rand].val;
-        if (numberAddOn) {
-          const generatedNumber = generateRandomNumChras(1, 2);
-          wordCandidateKey = wordCandidateKey + generatedNumber;
-          wordCandidateVal = wordCandidateVal + generatedNumber;
-        }
-        if (symbolAddOn) {
-          const generatedSymbol = generateRandomSymbolChras(1, 1);
-          wordCandidateKey = wordCandidateKey + generatedSymbol;
-          wordCandidateVal = wordCandidateVal + generatedSymbol;
-        }
-        ChineseIdiomsList.push({
-          key: wordCandidateKey,
-          val: wordCandidateVal,
-        });
-      }
+const JavawordsGenerator = (
+  wordsCount,
+  languageMode
+) => {
+  if (languageMode === JAVA_MODE){
+    const JavaWordsList = [];
+    for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){
+      const rand = randomIntFromRange(0, 53);
+      let JavawordCandidate = JAVA_SYNTAX[rand].val;
     }
-
-    return ChineseIdiomsList;
+    return JavaWordsList;
   }
-};
+  return ["something", "went", "wrong"];
+}
 
-const wordsCardVocabGenerator = (vocabSource, chapter) => {
-  const wordsList = [];
-  const chapterCatalog = DICTIONARY_SOURCE_CATALOG[vocabSource];
-  const chapterStartIndex = chapterCatalog[chapter][0];
-  const chapterEndIndex = chapterCatalog[chapter][1];
-  for (let i = chapterStartIndex; i < chapterEndIndex + 1; i++) {
-    wordsList.push(VOCAB_DICTIONARIES[vocabSource][i]);
+const PyWordsGenerator = (
+  wordsCount,
+  languageMode
+) => {
+  if (languageMode === PYTHON_MODE){
+    const PyWordsList = [];
+    for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){
+      const rand = randomIntFromRange(0, 53);
+      let PywordCandidate = PYTHON_SYNTAX[rand].val;
+    }
+    return PyWordsList;
   }
-  return wordsList;
-};
+  return ["something", "went", "wrong"];
+}
 
-export { wordsGenerator, chineseWordsGenerator, wordsCardVocabGenerator };
+export { wordsGenerator, CwordsGenerator, CppwordsGenerator, JavawordsGenerator, PyWordsGenerator };

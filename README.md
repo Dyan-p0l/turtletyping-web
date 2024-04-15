@@ -1,10 +1,10 @@
-# Ele types
+# Turtle types
 
 <img width="1000" alt="Screen Shot 2022-08-28 at 9 15 36 AM" src="https://user-images.githubusercontent.com/39578778/187084111-97d69aa7-53e4-46b9-b156-3ecc4d180d08.png">
 
-## [www.eletypes.com](https://www.eletypes.com) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/gamer-ai/eletype-frontend?include_prereleases) ![GitHub stars](https://img.shields.io/github/stars/gamer-ai/eletype-frontend?style=social) ![GitHub forks](https://img.shields.io/github/forks/gamer-ai/eletype-frontend?style=social)
 
-An elegant typing test tool.
+
+An minimalistic typing test tool.
 
 > Typing rule and interactions was inspired by the famous [monkeytype.com](www.monkeytype.com);
 
@@ -13,64 +13,19 @@ An elegant typing test tool.
 
 ## Feature Requests / Issues / Bug Reports
 
-[![GitHub issues](https://img.shields.io/github/issues/gamer-ai/eletype-frontend)](https://github.com/gamer-ai/eletype-frontend/issues)
 
-https://github.com/gamer-ai/eletype-frontend/issues
 
 ## Community Channel:
 
-![Discord](https://img.shields.io/discord/993567075589181621?style=for-the-badge)
 
-To join the community, please go to the website and hit "discord" icon.
+
+
 
 ## Current Features:
 
 #### 1. Typing Test (words, sentence)
 
-  - words mode
-    - Eng Hard: Random blogs Words data source
-    - Eng Normal: Top 1000 most frequent used English words
-    - CHN Pinyin Hard: Chinese top 1500 idioms
-    - CHN Pinyin Normal: Chinese top 5000 words/char
-    - support four tests duration 90s, 60s, 30s, 15s
-    - + Numbers: add random numbers from 0-99 at the end of the regenerated word
-    - + Symbols: add random symbols at the end of the regenerated words
-  - Sentence mode
-    - CHN: Random chinese short sentences
-    - ENG: Random English short sentences
-    - Support three sentences count setting: 5, 10, 15
-  - Stats:
-    - WPM
-    - KPM
-    - Accuracy
-    - Error analysis (correct/error/missing/extra chars count)
-  - Pacing Style (word pulse/ character caret):
-    - Pulse mode: the active word will have an underline pulse, which helps improve the speed typing habit.
-    - Caret mode: a pacing caret, advancing character by character, which aligns normal typing habit.
 
-#### 2. Words Card (for English learners)
-
-  - Vocabulary Source
-    - GRE vocab
-    - TOEFL
-    - CET6
-    - CET4
-  - Multi Chapters Selection
-  - Words Card Navigation UI
-  - Recite Mode (word visibility off while phrase shown)
-  
-#### 3. Coffee Mode
-
- - free typing mode for test typing anything
-
-#### 4. QWERTY Keyboard touch-typing trainer 
-
- - A QWERTY keyboard layout UI populating random key for touch typing with stats
-
-#### 5. Spotify player
-
- - A spotify player 
- 
 #### 6. Themes Collection
 
 - Static Themes
@@ -165,9 +120,6 @@ Create a branch with proper name example 'feat/your-cool-feature', create the pu
 
 ## Sponsors
 
-### Buy Me A Coffee:
-
-https://www.buymeacoffee.com/daguozi
 
 
 

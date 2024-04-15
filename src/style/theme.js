@@ -6,18 +6,19 @@ const lightTheme = {
   title: "#2979ff",
   textTypeBox: "#9E9E9E",
   stats: "#3D5AFE",
-  fontFamily: "sans-serif",
+  fontFamily: "Roboto Mono",
 };
 
 const darkTheme = {
   label: "Dark",
   background: "#121212",
-  text: "#FAFAFA",
+  text: "#FAFAFA",  
   gradient: "linear-gradient(315deg, #F7971E 0%, #FFD200 94%)",
   title: "#ffc107",
   textTypeBox: "#706d6d",
-  stats: "#BB86FC",
-  fontFamily: "sans-serif",
+  stats: "#7FFFD4",
+  fontFamily: "Roboto Mono",
+  subheadercolor: "#7FFFD4",
 };
 
 const cyberTheme = {

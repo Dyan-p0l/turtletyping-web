@@ -45,7 +45,7 @@ export const GlobalStyles = createGlobalStyle`
     display: block;
     align-items: center;
     justify-content: center;
-    padding-bottom: 2%;
+    padding-bottom: 0%;
     top: 0;
     left:0;
     width: 100%;
@@ -62,13 +62,18 @@ export const GlobalStyles = createGlobalStyle`
     display: block;
   }
   h1 {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: ${({ theme }) => theme.title};
     opacity: 0.9;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
   }
   h3{
     margin-right: 10px;
+    color: white;
   }
   h4{
     margin-right: 10px;
@@ -114,8 +119,8 @@ export const GlobalStyles = createGlobalStyle`
     text-align: center;
   }
   .sub-header {
-    color: ${({ theme }) => theme.textTypeBox};
-    opacity: 0.5;
+    color: ${({ theme }) => theme.subheadercolor};
+    opacity: 1;
     border-right: 2px solid;
     animation: blinkingCursor 2s infinite;;
     @keyframes blinkingCursor{
@@ -133,6 +138,7 @@ export const GlobalStyles = createGlobalStyle`
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 55px;
     position: relative;
     top: 10%;
     @media only screen 
@@ -143,14 +149,15 @@ export const GlobalStyles = createGlobalStyle`
       width: 60%;
     }
   }
-  .type-box-chinese {
+  .type-box-c {
     display: block;
     max-width: 1000px;
-    height: 240px;
+    height: 140px;
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
-    position: relative
+    margin-top: 55px;
+    position: relative;
     top: 10%;
     @media only screen 
     and (min-device-width: 375px) 
@@ -162,7 +169,7 @@ export const GlobalStyles = createGlobalStyle`
   }
   .words{
     color: ${({ theme }) => theme.textTypeBox};
-    font-size: 28px;
+    font-size: 1.5rem;
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -176,6 +183,16 @@ export const GlobalStyles = createGlobalStyle`
     border-bottom: 1px solid transparent;
     border-top: 1px solid transparent;
     scroll-margin: 4px;
+    letter-spacing: 0.1px;
+  }
+  .c-word{
+    margin: 5px 5px;
+    display: flex;
+    padding-right: 2px;
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    scroll-margin: 4px;
+    letter-spacing: 0.1px;
   }
   .active-word{
     animation: blinkingBackground 2s infinite;
@@ -297,27 +314,6 @@ export const GlobalStyles = createGlobalStyle`
   }
   .zen-button-deactive{
     color: ${({ theme }) => theme.textTypeBox};
-  }
-  .support-me{
-    color : #FF4081;
-    animation: blinkingColor 10s infinite;
-    @keyframes blinkingColor{
-      0%		{ color: #F48FB1;}
-      25%		{ color: #FF4081;}
-      50%		{ color: #F48FB1;}
-      75%		{color: #FF4081;}
-      100%	 {color: #F48FB1;}
-    }
-  }
-  .support-me-image{
-    height: 75%;
-    width: 75%;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    border-radius: 16px;
   }
   .menu-separater{
     color: ${({ theme }) => theme.textTypeBox};
@@ -660,5 +656,22 @@ export const GlobalStyles = createGlobalStyle`
   }
   .select-chapter-title{
     font-size: 16px;
+  }
+  .hidden{
+    display: none;
+  }
+  .time-text{
+    color: #7FFFD4;
+  }
+  .IconButton-set{
+    background-color: rgb(31, 35, 44);
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+    height: 39px;
+    width: 700px;
+    margin: 0px auto;
+    border-radius: 10px;
   }
 `;

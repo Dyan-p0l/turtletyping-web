@@ -2,9 +2,13 @@ import React, { useEffect, useState, useMemo } from "react";
 import useSound from "use-sound";
 import {
   wordsGenerator,
-  chineseWordsGenerator,
+  CwordsGenerator,
+  CppwordsGenerator,
+  JavawordsGenerator,
+  PyWordsGenerator
 } from "../../../scripts/wordsGenerator";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../utils/IconButton";
 import Grid from "@mui/material/Grid";
@@ -13,7 +17,7 @@ import Tooltip from "@mui/material/Tooltip";
 import useLocalPersistState from "../../../hooks/useLocalPersistState";
 import CapsLockSnackbar from "../CapsLockSnackbar";
 import Stats from "./Stats";
-import { Dialog } from "@mui/material";
+import { Dialog, getBackdropUtilityClass } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
   DEFAULT_COUNT_DOWN,
@@ -22,31 +26,22 @@ import {
   COUNT_DOWN_30,
   COUNT_DOWN_15,
   DEFAULT_WORDS_COUNT,
-  DEFAULT_DIFFICULTY,
-  HARD_DIFFICULTY,
-  NUMBER_ADDON,
-  SYMBOL_ADDON,
-  NUMBER_ADDON_TOOLTIP_TITLE,
-  SYMBOL_ADDON_TOOLTIP_TITLE,
   ENGLISH_MODE,
-  CHINESE_MODE,
-  ENGLISH_MODE_TOOLTIP_TITLE,
-  CHINESE_MODE_TOOLTIP_TITLE,
-  DEFAULT_DIFFICULTY_TOOLTIP_TITLE_CHINESE,
-  HARD_DIFFICULTY_TOOLTIP_TITLE_CHINESE,
+  C_MODE,
+  CPP_MODE,
+  JAVA_MODE,
+  PYTHON_MODE,
   RESTART_BUTTON_TOOLTIP_TITLE,
   REDO_BUTTON_TOOLTIP_TITLE,
   PACING_CARET,
   PACING_PULSE,
-  PACING_CARET_TOOLTIP,
-  PACING_PULSE_TOOLTIP,
-  NUMBER_ADDON_KEY,
-  SYMBOL_ADDON_KEY,
 } from "../../../constants/Constants";
 import { SOUND_MAP } from "../sound/sound";
 
+
 const TypeBox = ({
   textInputRef,
+  isFocusedMode,
   soundMode,
   soundType,
   handleInputFocus,
@@ -81,12 +76,12 @@ const TypeBox = ({
     if (e.keyCode === 13 || e.keyCode === 9) {
       e.preventDefault();
       setOpenRestart(false);
-      reset(countDownConstant, difficulty, language, numberAddOn, symbolAddOn, false);
+      reset(countDownConstant, language, false);
     } // press space to redo
     else if (e.keyCode === 32) {
       e.preventDefault();
       setOpenRestart(false);
-      reset(countDownConstant, difficulty, language, numberAddOn, symbolAddOn, true);
+      reset(countDownConstant, language, true);
     } else {
       e.preventDefault();
       setOpenRestart(false);
@@ -99,10 +94,19 @@ const TypeBox = ({
   // set up words state
   const [wordsDict, setWordsDict] = useState(() => {
     if (language === ENGLISH_MODE) {
-      return wordsGenerator(DEFAULT_WORDS_COUNT, difficulty, ENGLISH_MODE, numberAddOn, symbolAddOn);
+      return wordsGenerator(DEFAULT_WORDS_COUNT, ENGLISH_MODE);
     }
-    if (language === CHINESE_MODE) {
-      return chineseWordsGenerator(difficulty, CHINESE_MODE, numberAddOn, symbolAddOn);
+    if (language === C_MODE) {
+      return CwordsGenerator(DEFAULT_WORDS_COUNT, C_MODE);
+    }
+    if (language === CPP_MODE) {
+      return CppwordsGenerator(DEFAULT_WORDS_COUNT, CPP_MODE);
+    }
+    if (language === JAVA_MODE) {
+      return JavawordsGenerator(DEFAULT_WORDS_COUNT, JAVA_MODE);
+    }
+    if (language === PYTHON_MODE) {
+      return PyWordsGenerator(DEFAULT_WORDS_COUNT, PYTHON_MODE);
     }
   });
 
@@ -128,9 +132,6 @@ const TypeBox = ({
 
   // set up game loop status state
   const [status, setStatus] = useState("waiting");
-
-  // enable menu
-  const menuEnabled = !isFocusedMode || status === "finished";
 
   // set up hidden input input val state
   const [currInput, setCurrInput] = useState("");
@@ -165,14 +166,33 @@ const TypeBox = ({
         );
         setWordsDict((currentArray) => [...currentArray, ...generatedEng]);
       }
-      if (language === CHINESE_MODE) {
-        const generatedChinese = chineseWordsGenerator(
-          difficulty,
-          CHINESE_MODE,
-          numberAddOn,
-          symbolAddOn
+      if(language === C_MODE){
+        const generatedC = CwordsGenerator(
+          DEFAULT_WORDS_COUNT, 
+          C_MODE
         );
-        setWordsDict((currentArray) => [...currentArray, ...generatedChinese]);
+        setWordsDict((currentArray) => [...currentArray, ...generatedC]);
+      }
+      if(language === CPP_MODE){
+        const generatedCpp = CppwordsGenerator(
+          DEFAULT_WORDS_COUNT, 
+          CPP_MODE
+        );
+        setWordsDict((currentArray) => [...currentArray, ...generatedCpp]);
+      }
+      if(language === JAVA_MODE){
+        const generatedJava = JavawordsGenerator(
+          DEFAULT_WORDS_COUNT, 
+          JAVA_MODE
+        );
+        setWordsDict((currentArray) => [...currentArray, ...generatedJava]);
+      }
+      if(language === PYTHON_MODE){
+        const generatedPy = PyWordsGenerator(
+          DEFAULT_WORDS_COUNT,
+          PYTHON_MODE
+        );
+        setWordsDict((currentArray) => [...currentArray, ...generatedPy]);
       }
     }
     if (
@@ -184,23 +204,30 @@ const TypeBox = ({
     } else {
       return;
     }
-  }, [currWordIndex, wordSpanRefs, difficulty, language, numberAddOn, symbolAddOn]);
+  }, [currWordIndex, wordSpanRefs, language]);
 
-  const reset = (newCountDown, difficulty, language, newNumberAddOn, newSymbolAddOn, isRedo) => {
+  const reset = (newCountDown, language, isRedo) => {
     setStatus("waiting");
     if (!isRedo) {
-      if (language === CHINESE_MODE) {
-        setWordsDict(chineseWordsGenerator(difficulty, language, newNumberAddOn, newSymbolAddOn));
-      }
       if (language === ENGLISH_MODE) {
-        setWordsDict(wordsGenerator(DEFAULT_WORDS_COUNT, difficulty, language, newNumberAddOn, newSymbolAddOn));
+        setWordsDict(wordsGenerator(DEFAULT_WORDS_COUNT, language));
+      }
+      if (language === C_MODE) {
+        setWordsDict(CwordsGenerator(DEFAULT_WORDS_COUNT, language));
+      }
+      if (language === CPP_MODE) {
+        setWordsDict(CppwordsGenerator(DEFAULT_WORDS_COUNT, language));
+      }
+      if (language === JAVA_MODE) {
+        setWordsDict(JavawordsGenerator(DEFAULT_WORDS_COUNT, language));
+      }
+      if (language === PYTHON_MODE) {
+        setWordsDict(PyWordsGenerator(DEFAULT_WORDS_COUNT, language));
       }
     }
-    setNumberAddOn(newNumberAddOn);
-    setSymbolAddOn(newSymbolAddOn);
     setCountDownConstant(newCountDown);
     setCountDown(newCountDown);
-    setDifficulty(difficulty);
+
     setLanguage(language);
     clearInterval(intervalId);
     setWpm(0);
@@ -503,41 +530,51 @@ const TypeBox = ({
     }
   };
 
-  const getChineseWordKeyClassName = (wordIdx) => {
+  
+  const getCWordClassName = (wordIdx) => {
     if (wordsInCorrect.has(wordIdx)) {
       if (currWordIndex === wordIdx) {
-        return "chinese-word-key error-chinese active-chinese";
+        if (pacingStyle === PACING_PULSE) {
+          return "c-word error-word active-word";
+        } else {
+          return "c-word error-word active-word-no-pulse";
+        }
       }
-      return "chinese-word-key error-chinese";
+      return "c-word error-word";
     } else {
       if (currWordIndex === wordIdx) {
-        return "chinese-word-key active-chinese";
+        if (pacingStyle === PACING_PULSE) {
+          return "c-word active-word";
+        } else {
+          return "c-word active-word-no-pulse";
+        }
       }
-      return "chinese-word-key";
+      return "c-word";
     }
   };
 
-  const getChineseWordClassName = (wordIdx) => {
+  const getCppWordClassName = (wordIdx) => {
     if (wordsInCorrect.has(wordIdx)) {
       if (currWordIndex === wordIdx) {
         if (pacingStyle === PACING_PULSE) {
-          return "chinese-word error-word active-word";
+          return "cpp-word error-word active-word";
         } else {
-          return "chinese-word error-word active-word-no-pulse";
+          return "cpp-word error-word active-word-no-pulse";
         }
       }
-      return "chinese-word error-word";
+      return "cpp-word error-word";
     } else {
       if (currWordIndex === wordIdx) {
         if (pacingStyle === PACING_PULSE) {
-          return "chinese-word active-word";
+          return "cpp-word active-word";
         } else {
-          return "chinese-word active-word-no-pulse";
+          return "cpp-word active-word-no-pulse";
         }
       }
-      return "chinese-word";
+      return "cpp-word";
     }
   };
+
 
   const getCharClassName = (wordIdx, charIdx, char, word) => {
     const keyString = wordIdx + "." + charIdx;
@@ -596,19 +633,9 @@ const TypeBox = ({
     }
   };
 
-  const getDifficultyButtonClassName = (buttonDifficulty) => {
-    if (difficulty === buttonDifficulty) {
-      return "active-button";
-    }
-    return "inactive-button";
-  };
+  
 
-  const getAddOnButtonClassName = (addon) => {
-    if (addon) {
-      return "active-button";
-    }
-    return "inactive-button";
-  };
+  
 
   const getPacingStyleButtonClassName = (buttonPacingStyle) => {
     if (pacingStyle === buttonPacingStyle) {
@@ -633,6 +660,14 @@ const TypeBox = ({
 
   return (
     <div onClick={handleInputFocus}>
+      <div className="IconButton-set" style={{position: 'fixed', top: '170px', left: '0', right: '0', margin: '0 auto'}}>
+      <IconButton style={{ marginLeft: '15px', fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => {reset(countDownConstant, ENGLISH_MODE, false);}}><span className={getLanguageButtonClassName(ENGLISH_MODE)}>Default</span></IconButton>
+      <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, C_MODE, false);}}><span className={getLanguageButtonClassName(C_MODE)}>C</span></IconButton>
+      <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, CPP_MODE, false);}}><span className={getLanguageButtonClassName(CPP_MODE)}>C++</span></IconButton>
+      <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, JAVA_MODE, false);}}><span className={getLanguageButtonClassName(JAVA_MODE)}>Java</span></IconButton>
+      <IconButton style={{ marginRight: '15px', fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, PYTHON_MODE, false);}}><span className={getLanguageButtonClassName(PYTHON_MODE)}>Python</span></IconButton>
+    </div>
+
       <CapsLockSnackbar open={capsLocked}></CapsLockSnackbar>
       {language === ENGLISH_MODE && (
         <div className="type-box">
@@ -684,28 +719,69 @@ const TypeBox = ({
         <div className="type-box-cpp">
         <div className="words">
           {words.map((word, i) => (
+            <span
+              key={i}
+              ref={wordSpanRefs[i]}
+              className={getCppWordClassName(i)}
+            >
+              {word.split("").map((char, idx) => (
                 <span
-                  key={i + "anchor"}
-                  className={getChineseWordKeyClassName(i)}
-                  ref={wordSpanRefs[i]}
+                  key={"word" + idx}
+                  className={getCharClassName(i, idx, char, word)}
                 >
-                  {" "}
-                  {wordsKey[i]}
+                  {char}
                 </span>
-                <span key={i + "val"} className={getChineseWordClassName(i)}>
-                  {word.split("").map((char, idx) => (
-                    <span
-                      key={"word" + idx}
-                      className={getCharClassName(i, idx, char, word)}
-                    >
-                      {char}
-                    </span>
-                  ))}
-                  {getExtraCharsDisplay(word, i)}
+              ))}
+              {getExtraCharsDisplay(word, i)}
+            </span>
+          ))}
+        </div>
+        </div>
+      )}
+      {language === JAVA_MODE && (
+        <div className="type-box-java">
+        <div className="words">
+          {words.map((word, i) => (
+            <span
+              key={i}
+              ref={wordSpanRefs[i]}
+              className={getCWordClassName(i)}
+            >
+              {word.split("").map((char, idx) => (
+                <span
+                  key={"word" + idx}
+                  className={getCharClassName(i, idx, char, word)}
+                >
+                  {char}
                 </span>
-              </div>
-            ))}
-          </div>
+              ))}
+              {getExtraCharsDisplay(word, i)}
+            </span>
+          ))}
+        </div>
+        </div>
+      )}
+      {language === PYTHON_MODE && (
+        <div className="type-box-py">
+        <div className="words">
+          {words.map((word, i) => (
+            <span
+              key={i}
+              ref={wordSpanRefs[i]}
+              className={getCWordClassName(i)}
+            >
+              {word.split("").map((char, idx) => (
+                <span
+                  key={"word" + idx}
+                  className={getCharClassName(i, idx, char, word)}
+                >
+                  {char}
+                </span>
+              ))}
+              {getExtraCharsDisplay(word, i)}
+            </span>
+          ))}
+        </div>
         </div>
       )}
       <div className="stats">
@@ -725,11 +801,11 @@ const TypeBox = ({
                 color="secondary"
                 size="medium"
                 onClick={() => {
-                  reset(countDownConstant, difficulty, language, numberAddOn, symbolAddOn, true);
+                  reset(countDownConstant, language, true);
                 }}
               >
                 <Tooltip title={REDO_BUTTON_TOOLTIP_TITLE}>
-                  <UndoIcon />
+                  <RestartAltIcon />
                 </Tooltip>
               </IconButton>
               <IconButton
@@ -737,18 +813,17 @@ const TypeBox = ({
                 color="secondary"
                 size="medium"
                 onClick={() => {
-                  reset(countDownConstant, difficulty, language,numberAddOn, symbolAddOn, false);
+                  reset(countDownConstant, language, false);
                 }}
               >
                 <Tooltip title={RESTART_BUTTON_TOOLTIP_TITLE}>
-                  <RestartAltIcon />
+                  <ChevronRightIcon />
                 </Tooltip>
               </IconButton>
-              {menuEnabled && (
                 <>
                   <IconButton
                     onClick={() => {
-                      reset(COUNT_DOWN_90, difficulty, language,numberAddOn, symbolAddOn, false);
+                      reset(COUNT_DOWN_90, language, true);
                     }}
                   >
                     <span className={getTimerButtonClassName(COUNT_DOWN_90)}>
@@ -757,7 +832,7 @@ const TypeBox = ({
                   </IconButton>
                   <IconButton
                     onClick={() => {
-                      reset(COUNT_DOWN_60, difficulty, language, numberAddOn, symbolAddOn,false);
+                      reset(COUNT_DOWN_60, language, true);
                     }}
                   >
                     <span className={getTimerButtonClassName(COUNT_DOWN_60)}>
@@ -766,7 +841,7 @@ const TypeBox = ({
                   </IconButton>
                   <IconButton
                     onClick={() => {
-                      reset(COUNT_DOWN_30, difficulty, language,numberAddOn, symbolAddOn, false);
+                      reset(COUNT_DOWN_30, language, true);
                     }}
                   >
                     <span className={getTimerButtonClassName(COUNT_DOWN_30)}>
@@ -775,7 +850,7 @@ const TypeBox = ({
                   </IconButton>
                   <IconButton
                     onClick={() => {
-                      reset(COUNT_DOWN_15, difficulty, language,numberAddOn, symbolAddOn, false);
+                      reset(COUNT_DOWN_15, language, true);
                     }}
                   >
                     <span className={getTimerButtonClassName(COUNT_DOWN_15)}>
@@ -783,150 +858,20 @@ const TypeBox = ({
                     </span>
                   </IconButton>
                 </>
-              )}
+              
             </Box>
-            {menuEnabled && (
-              <Box display="flex" flexDirection="row">
-                <IconButton
-                  onClick={() => {
-                    reset(
-                      countDownConstant,
-                      DEFAULT_DIFFICULTY,
-                      language,
-                      numberAddOn, symbolAddOn,
-                      false
-                    );
-                  }}
-                >
-                  <Tooltip
-                    title={
-                      language === ENGLISH_MODE
-                        ? DEFAULT_DIFFICULTY_TOOLTIP_TITLE
-                        : DEFAULT_DIFFICULTY_TOOLTIP_TITLE_CHINESE
-                    }
-                  >
-                    <span
-                      className={getDifficultyButtonClassName(
-                        DEFAULT_DIFFICULTY
-                      )}
-                    >
-                      {DEFAULT_DIFFICULTY}
-                    </span>
-                  </Tooltip>
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    reset(countDownConstant, HARD_DIFFICULTY, language, numberAddOn, symbolAddOn,false);
-                  }}
-                >
-                  <Tooltip
-                    title={
-                      language === ENGLISH_MODE
-                        ? HARD_DIFFICULTY_TOOLTIP_TITLE
-                        : HARD_DIFFICULTY_TOOLTIP_TITLE_CHINESE
-                    }
-                  >
-                    <span
-                      className={getDifficultyButtonClassName(HARD_DIFFICULTY)}
-                    >
-                      {HARD_DIFFICULTY}
-                    </span>
-                  </Tooltip>
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    reset(
-                      countDownConstant,
-                      difficulty,
-                      language,
-                      !numberAddOn,
-                      symbolAddOn,
-                      false
-                    );
-                  }}
-                >
-                  <Tooltip
-                    title={
-                      NUMBER_ADDON_TOOLTIP_TITLE
-                    }
-                  >
-                    <span
-                      className={getAddOnButtonClassName(
-                        numberAddOn
-                      )}
-                    >
-                      {NUMBER_ADDON}
-                    </span>
-                  </Tooltip>
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    reset(
-                      countDownConstant,
-                      difficulty,
-                      language,
-                      numberAddOn,
-                      !symbolAddOn,
-                      false
-                    );
-                  }}
-                >
-                  <Tooltip
-                    title={
-                      SYMBOL_ADDON_TOOLTIP_TITLE
-                    }
-                  >
-                    <span
-                      className={getAddOnButtonClassName(
-                        symbolAddOn
-                      )}
-                    >
-                      {SYMBOL_ADDON}
-                    </span>
-                  </Tooltip>
-                </IconButton>
-                <IconButton>
-                  {" "}
-                  <span className="menu-separator"> | </span>{" "}
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    reset(countDownConstant, difficulty, ENGLISH_MODE, numberAddOn, symbolAddOn,false);
-                  }}
-                >
-                  <Tooltip title={ENGLISH_MODE_TOOLTIP_TITLE}>
-                    <span className={getLanguageButtonClassName(ENGLISH_MODE)}>
-                      eng
-                    </span>
-                  </Tooltip>
-                </IconButton>
-                <IconButton
-                  onClick={() => {
-                    reset(countDownConstant, difficulty, CHINESE_MODE,numberAddOn, symbolAddOn, false);
-                  }}
-                >
-                  <Tooltip title={CHINESE_MODE_TOOLTIP_TITLE}>
-                    <span className={getLanguageButtonClassName(CHINESE_MODE)}>
-                      chn
-                    </span>
-                  </Tooltip>
-                </IconButton>
-              </Box>
-            )}
-            {menuEnabled && (
+
               <Box display="flex" flexDirection="row">
                 <IconButton
                   onClick={() => {
                     setPacingStyle(PACING_PULSE);
                   }}
                 >
-                  <Tooltip title={PACING_PULSE_TOOLTIP}>
                     <span
                       className={getPacingStyleButtonClassName(PACING_PULSE)}
                     >
                       {PACING_PULSE}
                     </span>
-                  </Tooltip>
                 </IconButton>
                 <IconButton
                   onClick={() => {
@@ -938,10 +883,9 @@ const TypeBox = ({
                     >
                       {PACING_CARET}
                     </span>
-                  </Tooltip>
                 </IconButton>
               </Box>
-            )}
+            
           </Grid>
         </div>
       </div>
@@ -969,14 +913,14 @@ const TypeBox = ({
           <div>
             <span className="key-note"> press </span>
             <span className="key-type">Space</span>{" "}
-            <span className="key-note">to redo</span>
+            <span className="key-note">to type the same set of words</span>
           </div>
           <div>
             <span className="key-note"> press </span>
             <span className="key-type">Tab</span>{" "}
             <span className="key-note">/</span>{" "}
             <span className="key-type">Enter</span>{" "}
-            <span className="key-note">to restart</span>
+            <span className="key-note">for next set of words</span>
           </div>
           <span className="key-note"> press </span>
           <span className="key-type">any key </span>{" "}

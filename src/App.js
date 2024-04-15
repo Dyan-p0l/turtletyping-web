@@ -5,17 +5,13 @@ import { GlobalStyles } from "./style/global";
 import TypeBox from "./components/features/TypeBox/TypeBox";
 import SentenceBox from "./components/features/SentenceBox/SentenceBox";
 import Logo from "./components/common/Logo";
-import MusicPlayerSnackbar from "./components/features/MusicPlayer/MusicPlayerSnackbar";
 import FooterMenu from "./components/common/FooterMenu";
-import FreeTypingBox from "./components/features/FreeTypingBox";
 import {
   GAME_MODE,
   GAME_MODE_DEFAULT,
   GAME_MODE_SENTENCE,
 } from "./constants/Constants";
 import useLocalPersistState from "./hooks/useLocalPersistState";
-import DefaultKeyboard from "./components/features/Keyboard/DefaultKeyboard";
-import WordsCard from "./components/features/WordsCard/WordsCard";
 import {
   SOUND_MODE,
   soundOptions,
@@ -33,7 +29,6 @@ function App() {
       const upstreamTheme = themesOptions.find(
         (e) => e.label === localTheme.label
       ).value;
-      // we will do a deep equal here. In case we want to support customized local theme.
       const isDeepEqual = localTheme === upstreamTheme;
       return isDeepEqual ? localTheme : upstreamTheme;
     }
@@ -72,22 +67,15 @@ function App() {
   // trainer mode setting
   const [isTrainerMode, setIsTrainerMode] = useState(false);
 
-  // words card mode
-  const [isWordsCardMode, setIsWordsCardMode] = useLocalPersistState(
-    false,
-    "IsInWordsCardMode"
-  );
-
+  
   const isWordGameMode =
     gameMode === GAME_MODE_DEFAULT &&
     !isCoffeeMode &&
-    !isTrainerMode &&
-    !isWordsCardMode;
+    !isTrainerMode;
   const isSentenceGameMode =
     gameMode === GAME_MODE_SENTENCE &&
     !isCoffeeMode &&
-    !isTrainerMode &&
-    !isWordsCardMode;
+    !isTrainerMode;
 
   const handleThemeChange = (e) => {
     window.localStorage.setItem("theme", JSON.stringify(e.value));
@@ -98,39 +86,9 @@ function App() {
     setSoundType(e.label);
   };
 
-  const toggleFocusedMode = () => {
-    setIsFocusedMode(!isFocusedMode);
-  };
-
   const toggleSoundMode = () => {
     setSoundMode(!soundMode);
   };
-
-  const toggleMusicMode = () => {
-    setIsMusicMode(!isMusicMode);
-  };
-
-  const toggleCoffeeMode = () => {
-    setIsCoffeeMode(!isCoffeeMode);
-    setIsTrainerMode(false);
-    setIsWordsCardMode(false);
-  };
-
-  const toggleTrainerMode = () => {
-    setIsTrainerMode(!isTrainerMode);
-    setIsCoffeeMode(false);
-    setIsWordsCardMode(false);
-  };
-
-  const toggleWordsCardMode = () => {
-    setIsTrainerMode(false);
-    setIsCoffeeMode(false);
-    setIsWordsCardMode(!isWordsCardMode);
-  };
-
-  useEffect(() => {
-    localStorage.setItem("focused-mode", isFocusedMode);
-  }, [isFocusedMode]);
 
   const textInputRef = useRef(null);
   const focusTextInput = () => {
@@ -146,7 +104,7 @@ function App() {
   const focusSentenceInput = () => {
     sentenceInputRef.current && sentenceInputRef.current.focus();
   };
-
+  
   useEffect(() => {
     if (isWordGameMode) {
       focusTextInput();
@@ -156,21 +114,16 @@ function App() {
       focusSentenceInput();
       return;
     }
-    if (isCoffeeMode) {
-      focusTextArea();
-      return;
-    }
     return;
   }, [
     theme,
-    isFocusedMode,
-    isMusicMode,
-    isCoffeeMode,
     isWordGameMode,
     isSentenceGameMode,
     soundMode,
     soundType,
   ]);
+
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -178,11 +131,10 @@ function App() {
         <DynamicBackground theme={theme}></DynamicBackground>
         <div className="canvas">
           <GlobalStyles />
-          <Logo isFocusedMode={isFocusedMode} isMusicMode={isMusicMode}></Logo>
+          <Logo></Logo>
           {isWordGameMode && (
             <TypeBox
               textInputRef={textInputRef}
-              isFocusedMode={isFocusedMode}
               soundMode={soundMode}
               soundType={soundType}
               key="type-box"
@@ -192,28 +144,11 @@ function App() {
           {isSentenceGameMode && (
             <SentenceBox
               sentenceInputRef={sentenceInputRef}
-              isFocusedMode={isFocusedMode}
               soundMode={soundMode}
               soundType={soundType}
               key="sentence-box"
               handleInputFocus={() => focusSentenceInput()}
-            ></SentenceBox>
-          )}
-          {isCoffeeMode && !isTrainerMode && !isWordsCardMode && (
-            <FreeTypingBox
-              textAreaRef={textAreaRef}
-              soundMode={soundMode}
-              soundType={soundType}
-            />
-          )}
-          {isTrainerMode && !isCoffeeMode && !isWordsCardMode && (
-            <DefaultKeyboard
-              soundMode={soundMode}
-              soundType={soundType}
-            ></DefaultKeyboard>
-          )}
-          {isWordsCardMode && !isCoffeeMode && !isTrainerMode && (
-            <WordsCard soundMode={soundMode} soundType={soundType}></WordsCard>
+            ></SentenceBox> 
           )}
           <div className="bottomBar">
             <FooterMenu
@@ -225,25 +160,8 @@ function App() {
               soundType={soundType}
               handleSoundTypeChange={handleSoundTypeChange}
               handleThemeChange={handleThemeChange}
-              toggleFocusedMode={toggleFocusedMode}
-              toggleMusicMode={toggleMusicMode}
-              toggleCoffeeMode={toggleCoffeeMode}
-              isCoffeeMode={isCoffeeMode}
-              isMusicMode={isMusicMode}
-              isFocusedMode={isFocusedMode}
-              gameMode={gameMode}
-              handleGameModeChange={handleGameModeChange}
-              isTrainerMode={isTrainerMode}
-              toggleTrainerMode={toggleTrainerMode}
-              isWordsCardMode={isWordsCardMode}
-              toggleWordsCardMode={toggleWordsCardMode}
             ></FooterMenu>
           </div>
-          <MusicPlayerSnackbar
-            isMusicMode={isMusicMode}
-            isFocusedMode={isFocusedMode}
-            onMouseLeave={() => focusTextInput()}
-          ></MusicPlayerSnackbar>
         </div>
       </>
     </ThemeProvider>
