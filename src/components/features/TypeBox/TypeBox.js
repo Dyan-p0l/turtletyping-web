@@ -26,8 +26,6 @@ import {
   HARD_DIFFICULTY,
   NUMBER_ADDON,
   SYMBOL_ADDON,
-  DEFAULT_DIFFICULTY_TOOLTIP_TITLE,
-  HARD_DIFFICULTY_TOOLTIP_TITLE,
   NUMBER_ADDON_TOOLTIP_TITLE,
   SYMBOL_ADDON_TOOLTIP_TITLE,
   ENGLISH_MODE,
@@ -49,7 +47,6 @@ import { SOUND_MAP } from "../sound/sound";
 
 const TypeBox = ({
   textInputRef,
-  isFocusedMode,
   soundMode,
   soundType,
   handleInputFocus,
@@ -68,30 +65,11 @@ const TypeBox = ({
     "pacing-style"
   );
 
-  // local persist difficulty
-  const [difficulty, setDifficulty] = useLocalPersistState(
-    DEFAULT_DIFFICULTY,
-    "difficulty"
-  );
-
-  // local persist difficulty
   const [language, setLanguage] = useLocalPersistState(
     ENGLISH_MODE,
     "language"
   );
 
-  // local persist words add on for number
-  const [numberAddOn, setNumberAddOn] = useLocalPersistState(
-    false,
-    NUMBER_ADDON_KEY
-  )
-
-  // local persist words add on for symbol
-  const [symbolAddOn, setSymbolAddOn] = useLocalPersistState(
-    false,
-    SYMBOL_ADDON_KEY
-  )
-  
   // Caps Lock
   const [capsLocked, setCapsLocked] = useState(false);
 
@@ -183,10 +161,7 @@ const TypeBox = ({
       if (language === ENGLISH_MODE) {
         const generatedEng = wordsGenerator(
           DEFAULT_WORDS_COUNT,
-          difficulty,
           ENGLISH_MODE,
-          numberAddOn,
-          symbolAddOn
         );
         setWordsDict((currentArray) => [...currentArray, ...generatedEng]);
       }
@@ -682,11 +657,33 @@ const TypeBox = ({
           </div>
         </div>
       )}
-      {language === CHINESE_MODE && (
-        <div className="type-box-chinese">
-          <div className="words">
-            {words.map((word, i) => (
-              <div key={i + "word"}>
+      {language === C_MODE && (
+        <div className="type-box-c">
+        <div className="words">
+          {words.map((word, i) => (
+            <span
+              key={i}
+              ref={wordSpanRefs[i]}
+              className={getCWordClassName(i)}
+            >
+              {word.split("").map((char, idx) => (
+                <span
+                  key={"word" + idx}
+                  className={getCharClassName(i, idx, char, word)}
+                >
+                  {char}
+                </span>
+              ))}
+              {getExtraCharsDisplay(word, i)}
+            </span>
+          ))}
+        </div>
+        </div>
+      )}
+      {language === CPP_MODE && (
+        <div className="type-box-cpp">
+        <div className="words">
+          {words.map((word, i) => (
                 <span
                   key={i + "anchor"}
                   className={getChineseWordKeyClassName(i)}
@@ -936,7 +933,6 @@ const TypeBox = ({
                     setPacingStyle(PACING_CARET);
                   }}
                 >
-                  <Tooltip title={PACING_CARET_TOOLTIP}>
                     <span
                       className={getPacingStyleButtonClassName(PACING_CARET)}
                     >
