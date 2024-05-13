@@ -77,7 +77,7 @@ export const GlobalStyles = createGlobalStyle`
   }
   h4{
     margin-right: 10px;
-    opacity: 0.7;
+    opacity: 1;
   }
   .stats {
     display: block;
@@ -87,23 +87,6 @@ export const GlobalStyles = createGlobalStyle`
     margin-left: auto;
     margin-right: auto;
     color: ${({ theme }) => theme.stats};
-    bottom: 10%;
-  }
-  .wordscard-UI{
-    display: block;
-    max-width: 1000px;
-    margin-top: 150px;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    bottom: 10%;
-  }
-  .wordscard-UI-info{
-    margin-top: 30px;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    color: ${({ theme }) => theme.textTypeBox};
     bottom: 10%;
   }
   .keyboard-stats {
@@ -122,7 +105,7 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.subheadercolor};
     opacity: 1;
     border-right: 2px solid;
-    animation: blinkingCursor 2s infinite;;
+    animation: blinkingCursor 2s infinite;
     @keyframes blinkingCursor{
       0%		{ border-right-color: ${({ theme }) => theme.stats};}
       25%		{ border-right-color: transparent;}
@@ -149,14 +132,14 @@ export const GlobalStyles = createGlobalStyle`
       width: 60%;
     }
   }
-  .type-box-c {
+  .type-box-c, .type-box-cpp, .type-box-java, .type-box-py{
     display: block;
     max-width: 1000px;
     height: 140px;
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 55px;
+    margin-top: 75px;
     position: relative;
     top: 10%;
     @media only screen 
@@ -185,7 +168,7 @@ export const GlobalStyles = createGlobalStyle`
     scroll-margin: 4px;
     letter-spacing: 0.1px;
   }
-  .c-word{
+  .c-word, .cpp-word{
     margin: 5px 5px;
     display: flex;
     padding-right: 2px;
@@ -233,6 +216,22 @@ export const GlobalStyles = createGlobalStyle`
   .caret-char-left{
     border-left: 1px solid ${({ theme }) => theme.stats};
     border-right: 1px solid transparent;
+    transition: .125s;
+    transition-behavior: normal;
+    transition-duration: 0.125s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    transition-property: all;
+    animation: 
+      @keyframes caretFlashSmooth {
+        0% ,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
   }
   .caret-char-left-start{
     border-left: 1px solid;
@@ -248,13 +247,16 @@ export const GlobalStyles = createGlobalStyle`
     }
   }
   .caret-char-right{
-    border-right: 1px solid ${({ theme }) => theme.stats};
+    border-right: 2px solid ${({ theme }) => theme.stats};
     border-left: 1x solid transparent;
   }
   .caret-char-right-correct{
     color: ${({ theme }) => theme.text};
     border-right: 1px solid ${({ theme }) => theme.stats};
     border-left: 1px solid transparent;
+  }
+  .smooth-char-right-correct{
+    color: ${({ theme }) => theme.text};
   }
   .caret-char-right-error{
     color: red;
@@ -309,42 +311,13 @@ export const GlobalStyles = createGlobalStyle`
   .inactive-button{
     color: ${({ theme }) => theme.textTypeBox};
   }
-  .zen-button{
-    color: ${({ theme }) => theme.stats};
-  }
-  .zen-button-deactive{
-    color: ${({ theme }) => theme.textTypeBox};
-  }
+  
   .menu-separater{
     color: ${({ theme }) => theme.textTypeBox};
     background-color: none;
     font-size: 16px;
   }
-  .chinese-word{
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    display: flex;
-    padding-right: 2px;
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-  }
-  .chinese-word-key{
-    margin: 4px 4px;
-    color: ${({ theme }) => theme.textTypeBox};
-    background-color: none;
-    display: flex;
-    justify-content: center;
-    font-size: 20px;
-    scroll-margin: 4px;
-    text-align: center;
-  }
-  .error-chinese{
-    color: red;
-  }
-  .active-chinese{
-    color: ${({ theme }) => theme.stats};
-  }
+  
   .dialog{
     background: ${({ theme }) => theme.background};
   }
@@ -587,73 +560,6 @@ export const GlobalStyles = createGlobalStyle`
   .IncorrectKeyDowns{
     color: red;
   }
-  .words-card-container{
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-  .words-card-catalog{
-    width: 10%;
-    float: left;
-    text-align: left;
-    border-left: 2px groove ${({ theme }) => theme.stats};
-    border-top: 1px solid ${({ theme }) => theme.stats};
-    border-radius: 12px;
-    padding-left: 20px;
-  }
-  .words-card-main{
-    width: 80%;
-    height: 90%;
-    float: left;
-    text-align: center;
-  }
-  .Catalog{
-    list-style-type: none;
-    padding: 10px;
-    max-height: 300px;
-    margin-bottom: 5px;
-    overflow: hidden;
-    overflow-y:scroll;
-    text-align: left;
-    margin-top: 10px;
-  }
-  .Catalog::-webkit-scrollbar{
-    width:5px;
-  }
-  .Catalog::-webkit-scrollbar-track{
-    background:transparent;
-  }
-  .Catalog::-webkit-scrollbar-thumb{
-    background:${({ theme }) => theme.stats};
-    border-radius:12px;
-  }
-  .Catalog-title{
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  .Catalog-li{
-    cursor:pointer;
-    margin-bottom: 10px;
-    color: ${({ theme }) => theme.textTypeBox};
-  }
-  .Catalog-li-Activated{
-    cursor:default;
-    margin-bottom: 10px;
-    color: ${({ theme }) => theme.stats};
-  }
-  .Catalog-Button{
-    background-color: ${({ theme }) => theme.background};
-    color: ${({ theme }) => theme.textTypeBox};
-  }
-  .Catalog-Button-Activated{
-    background-color: ${({ theme }) => theme.background};
-    color: ${({ theme }) => theme.stats};
-  }
-  .Catalog-Selected{
-    background-color: ${({ theme }) => theme.background};
-    color: ${({ theme }) => theme.textTypeBox};
-    margin-top: 20px;
-  }
   .select-chapter-title{
     font-size: 16px;
   }
@@ -661,8 +567,17 @@ export const GlobalStyles = createGlobalStyle`
     display: none;
   }
   .time-text{
-    color: #7FFFD4;
+    color: #FFFFFF;
+    font-family: 'Roboto Mono';
+    font-weight: 700;
+    font-size: 1.5em;
   }
+  .time-num{
+    color: ${({ theme }) =>theme.stats};
+    font-family: 'Roboto Mono';
+    font-size: 1.5em;
+    font-weight: 600;
+  }  
   .IconButton-set{
     background-color: rgb(31, 35, 44);
     justify-content: center;
@@ -674,4 +589,34 @@ export const GlobalStyles = createGlobalStyle`
     margin: 0px auto;
     border-radius: 10px;
   }
+  .smooth-caret {
+    position: fixed;
+    display: block;
+    transform-origin: top, left;
+    top: 282px;
+    left: 273px;
+    width: 1px; /* Adjust as needed */
+    height: 1em; /* Adjust as needed */
+    background: #FFFFFF; /* Adjust color as needed */
+    pointer-events: none;
+    transition: .125s;
+    transition-behavior: normal;
+    transition-duration: 0.125s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+    transition-property: all;
+    animation: 
+      @keyframes caretFlashSmooth {
+        0% ,
+        100% {
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+  }
+
+  
+  
 `;

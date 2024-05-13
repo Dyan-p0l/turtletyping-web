@@ -58,6 +58,7 @@ const CppwordsGenerator = (
     for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){
       const rand = randomIntFromRange(0, 53);
       let CppwordCandidate = CPP_SYNTAX[rand].val;
+      CppWordsList.push({key: CppwordCandidate, val: CppwordCandidate});
     }
     return CppWordsList;
   }
@@ -73,6 +74,7 @@ const JavawordsGenerator = (
     for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){
       const rand = randomIntFromRange(0, 53);
       let JavawordCandidate = JAVA_SYNTAX[rand].val;
+      JavaWordsList.push({key: JavawordCandidate, val: JavawordCandidate});
     }
     return JavaWordsList;
   }
@@ -88,6 +90,7 @@ const PyWordsGenerator = (
     for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){
       const rand = randomIntFromRange(0, 53);
       let PywordCandidate = PYTHON_SYNTAX[rand].val;
+      PyWordsList.push({key: PywordCandidate, val: PywordCandidate});
     }
     return PyWordsList;
   }

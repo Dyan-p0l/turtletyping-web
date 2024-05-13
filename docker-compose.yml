@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-  eletypes-react:
+  turtletypes_react:
     build:
       dockerfile: Dockerfile
     image: turtletypes_react

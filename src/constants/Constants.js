@@ -6,36 +6,18 @@ const COUNT_DOWN_15 = 15;
 const DEFAULT_COUNT_DOWN = COUNT_DOWN_60;
 const RESTART_BUTTON_TOOLTIP_TITLE = "Press [Tab] + [Enter] for next set of words";
 const REDO_BUTTON_TOOLTIP_TITLE = "[Tab] + [Space] to type the same set of words";
-const RESTART_BUTTON_TOOLTIP_TITLE_WORDSCARD = "[Tab] + [Enter] to quick restart the chapter";
-const SELECT_ONE_OR_MORE_CHAPTERS = "Open to select one or more chapters. Pick the chapters in the typing area."
-const CHAR_TOOLTIP_TITLE =
-  "correct/incorrect/missing/extra\n extras are recorded even if deleted.";
-const SENTENCE_CHAR_TOOLTIP_TITLE = "correct/incorrect/extra\n";
 const ENGLISH_MODE_TOOLTIP_TITLE = "English Mode";
-
-
 const ENGLISH_MODE = "ENGLISH_MODE";
 const C_MODE = "C_MODE";
 const CPP_MODE = "CPP_MODE";
 const JAVA_MODE = "JAVA_MODE";
 const PYTHON_MODE = "PYTHON_MODE";
-
 const GAME_MODE = "GAME_MODE";
 const GAME_MODE_DEFAULT = "WORD_MODE";
-const GAME_MODE_SENTENCE = "SENTENCE_MODE";
 const WORD_MODE_LABEL = "word";
-const SENTENCE_MODE_LABEL = "sentence";
-const TRAINER_MODE = "QWERTY keyboard practice mode";
-
-const DEFAULT_SENTENCES_COUNT = 5;
-const TEN_SENTENCES_COUNT = 10;
-const FIFTEEN_SENTENCES_COUNT = 15;
-
-const ENGLISH_SENTENCE_MODE_TOOLTIP_TITLE = "English Sentence Mode";
-
-
 const PACING_CARET = "caret";
 const PACING_PULSE = "pulse";
+const smoothCaret = "smooth-caret";
 
 
 
@@ -46,8 +28,6 @@ export {
   COUNT_DOWN_30,
   COUNT_DOWN_15,
   COUNT_DOWN_90,
-  CHAR_TOOLTIP_TITLE,
-  SENTENCE_CHAR_TOOLTIP_TITLE,
   ENGLISH_MODE,
   C_MODE,
   CPP_MODE,
@@ -58,16 +38,8 @@ export {
   ENGLISH_MODE_TOOLTIP_TITLE,
   GAME_MODE,
   GAME_MODE_DEFAULT,
-  GAME_MODE_SENTENCE,
   WORD_MODE_LABEL,
-  SENTENCE_MODE_LABEL,
-  DEFAULT_SENTENCES_COUNT,
-  TEN_SENTENCES_COUNT,
-  FIFTEEN_SENTENCES_COUNT,
-  ENGLISH_SENTENCE_MODE_TOOLTIP_TITLE,
-  TRAINER_MODE,
-  RESTART_BUTTON_TOOLTIP_TITLE_WORDSCARD,
-  SELECT_ONE_OR_MORE_CHAPTERS,
   PACING_CARET,
   PACING_PULSE,
+  smoothCaret,
 };

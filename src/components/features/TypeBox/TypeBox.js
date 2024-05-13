@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useMemo } from "react";
-import useSound from "use-sound";
 import {
   wordsGenerator,
   CwordsGenerator,
@@ -9,7 +8,6 @@ import {
 } from "../../../scripts/wordsGenerator";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import UndoIcon from "@mui/icons-material/Undo";
 import IconButton from "../../utils/IconButton";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -17,7 +15,7 @@ import Tooltip from "@mui/material/Tooltip";
 import useLocalPersistState from "../../../hooks/useLocalPersistState";
 import CapsLockSnackbar from "../CapsLockSnackbar";
 import Stats from "./Stats";
-import { Dialog, getBackdropUtilityClass } from "@mui/material";
+import { Dialog } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
   DEFAULT_COUNT_DOWN,
@@ -35,24 +33,22 @@ import {
   REDO_BUTTON_TOOLTIP_TITLE,
   PACING_CARET,
   PACING_PULSE,
+  smoothCaret,
 } from "../../../constants/Constants";
-import { SOUND_MAP } from "../sound/sound";
 
 
 const TypeBox = ({
   textInputRef,
-  isFocusedMode,
-  soundMode,
-  soundType,
   handleInputFocus,
 }) => {
-  const [play] = useSound(SOUND_MAP[soundType], { volume: 0.5 });
 
   // local persist timer
   const [countDownConstant, setCountDownConstant] = useLocalPersistState(
     DEFAULT_COUNT_DOWN,
     "timer-constant"
   );
+
+
 
   // local persist pacing style
   const [pacingStyle, setPacingStyle] = useLocalPersistState(
@@ -64,6 +60,11 @@ const TypeBox = ({
     ENGLISH_MODE,
     "language"
   );
+
+  
+  
+  
+
 
   // Caps Lock
   const [capsLocked, setCapsLocked] = useState(false);
@@ -114,9 +115,7 @@ const TypeBox = ({
     return wordsDict.map((e) => e.val);
   }, [wordsDict]);
 
-  const wordsKey = useMemo(() => {
-    return wordsDict.map((e) => e.key);
-  }, [wordsDict]);
+  
 
   const wordSpanRefs = useMemo(
     () =>
@@ -339,9 +338,6 @@ const TypeBox = ({
   };
 
   const handleKeyDown = (e) => {
-    if (status !== "finished" && soundMode) {
-      play();
-    }
     const key = e.key;
     const keyCode = e.keyCode;
     setCapsLocked(e.getModifierState("CapsLock"));
@@ -531,49 +527,10 @@ const TypeBox = ({
   };
 
   
-  const getCWordClassName = (wordIdx) => {
-    if (wordsInCorrect.has(wordIdx)) {
-      if (currWordIndex === wordIdx) {
-        if (pacingStyle === PACING_PULSE) {
-          return "c-word error-word active-word";
-        } else {
-          return "c-word error-word active-word-no-pulse";
-        }
-      }
-      return "c-word error-word";
-    } else {
-      if (currWordIndex === wordIdx) {
-        if (pacingStyle === PACING_PULSE) {
-          return "c-word active-word";
-        } else {
-          return "c-word active-word-no-pulse";
-        }
-      }
-      return "c-word";
-    }
-  };
+ 
 
-  const getCppWordClassName = (wordIdx) => {
-    if (wordsInCorrect.has(wordIdx)) {
-      if (currWordIndex === wordIdx) {
-        if (pacingStyle === PACING_PULSE) {
-          return "cpp-word error-word active-word";
-        } else {
-          return "cpp-word error-word active-word-no-pulse";
-        }
-      }
-      return "cpp-word error-word";
-    } else {
-      if (currWordIndex === wordIdx) {
-        if (pacingStyle === PACING_PULSE) {
-          return "cpp-word active-word";
-        } else {
-          return "cpp-word active-word-no-pulse";
-        }
-      }
-      return "cpp-word";
-    }
-  };
+ 
+  
 
 
   const getCharClassName = (wordIdx, charIdx, char, word) => {
@@ -586,6 +543,15 @@ const TypeBox = ({
     ) {
       return "caret-char-left";
     }
+    if (
+      pacingStyle === smoothCaret &&
+      wordIdx === currWordIndex &&
+      charIdx === currCharIndex + 1 &&
+      status !== "finished"
+    ) {
+      return "smooth-current-char";
+    }
+
     if (history[keyString] === true) {
       if (
         pacingStyle === PACING_CARET &&
@@ -596,6 +562,16 @@ const TypeBox = ({
       ) {
         return "caret-char-right-correct";
       }
+      if (
+        pacingStyle === smoothCaret &&
+        wordIdx === currWordIndex &&
+        word.length - 1 === currCharIndex &&
+        charIdx === currCharIndex &&
+        status !== "finished"
+      ) {
+        return "smooth-char-right-correct";
+      }
+
       return "correct-char";
     }
     if (history[keyString] === false) {
@@ -607,6 +583,15 @@ const TypeBox = ({
         status !== "finished"
       ) {
         return "caret-char-right-error";
+      }
+      if (
+        pacingStyle === PACING_CARET &&
+        wordIdx === currWordIndex &&
+        word.length - 1 === currCharIndex &&
+        charIdx === currCharIndex &&
+        status !== "finished"
+      ) {
+        return "smooth-char-right-error";
       }
       return "error-char";
     }
@@ -632,6 +617,13 @@ const TypeBox = ({
       return "char";
     }
   };
+
+  
+
+  const nextLetter = document.querySelector('.smooth-current-char');
+  const nextWord = document.querySelector('.word active-word-no-pulse');
+  const smoothcaret = document.querySelector('.smooth-caret'); 
+  const lastLetter = document.querySelector('.smooth-char-right-correct');
 
   
 
@@ -672,6 +664,10 @@ const TypeBox = ({
       {language === ENGLISH_MODE && (
         <div className="type-box">
           <div className="words">
+            {pacingStyle === smoothCaret && (
+              <div className="smooth-caret" style={{  }}>
+              </div>
+            )}
             {words.map((word, i) => (
               <span
                 key={i}
@@ -694,25 +690,26 @@ const TypeBox = ({
       )}
       {language === C_MODE && (
         <div className="type-box-c">
-        <div className="words">
-          {words.map((word, i) => (
-            <span
-              key={i}
-              ref={wordSpanRefs[i]}
-              className={getCWordClassName(i)}
-            >
-              {word.split("").map((char, idx) => (
-                <span
-                  key={"word" + idx}
-                  className={getCharClassName(i, idx, char, word)}
-                >
-                  {char}
-                </span>
-              ))}
-              {getExtraCharsDisplay(word, i)}
-            </span>
-          ))}
-        </div>
+          <div className="words">
+            {words.map((word, i) => (
+              <span
+                key={i}
+                ref={wordSpanRefs[i]}
+                className={getWordClassName(i)}
+              >
+                {word.split("").map((char, idx) => (
+                  <span
+                    key={"word" + idx}
+                    className={getCharClassName(i, idx, char, word)}
+                  >
+                    {char}
+                  </span>
+                ))}
+                {getExtraCharsDisplay(word, i)}
+              </span>
+            ))}
+            
+          </div>
         </div>
       )}
       {language === CPP_MODE && (
@@ -722,7 +719,7 @@ const TypeBox = ({
             <span
               key={i}
               ref={wordSpanRefs[i]}
-              className={getCppWordClassName(i)}
+              className={getWordClassName(i)}
             >
               {word.split("").map((char, idx) => (
                 <span
@@ -745,7 +742,7 @@ const TypeBox = ({
             <span
               key={i}
               ref={wordSpanRefs[i]}
-              className={getCWordClassName(i)}
+              className={getWordClassName(i)}
             >
               {word.split("").map((char, idx) => (
                 <span
@@ -768,7 +765,7 @@ const TypeBox = ({
             <span
               key={i}
               ref={wordSpanRefs[i]}
-              className={getCWordClassName(i)}
+              className={getWordClassName(i)}
             >
               {word.split("").map((char, idx) => (
                 <span
@@ -883,6 +880,16 @@ const TypeBox = ({
                     >
                       {PACING_CARET}
                     </span>
+                </IconButton>
+                <IconButton onClick={() => {
+                  setPacingStyle(smoothCaret);
+                }} style = {{display: ''}}>
+                    <span
+                      className={getPacingStyleButtonClassName(smoothCaret)}
+                    >
+                      {smoothCaret}
+                    </span>
+
                 </IconButton>
               </Box>
             
