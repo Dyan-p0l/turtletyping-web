@@ -17,7 +17,7 @@ const Stats = ({
         <p className="time-num"> {countDown} s </p>
       </div>
       <Box display="flex" flexDirection="row" margin={"0px 190px"}>
-        {status === "finished" ? (<h3>WPM: {Math.round(wpm)}</h3>) : null}
+        {status === "finished" ? (<h3>WPM: {Math.round(wpm)}</h3>) : null} 
         {status === "finished" && (
           <h4>Accuracy: {Math.round(statsCharCount[0])} %</h4>
         )}

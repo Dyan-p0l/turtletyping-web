@@ -36,7 +36,7 @@ const wordsGenerator = (
 const CwordsGenerator = (
   wordsCount,
   languageMode
-) => {  
+) => {
   if (languageMode === C_MODE){
     const CwordsList = [];
     for(let i = 0; i < DEFAULT_WORDS_COUNT; i++){

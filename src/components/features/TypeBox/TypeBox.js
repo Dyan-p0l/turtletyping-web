@@ -132,7 +132,7 @@ const TypeBox = ({
   // set up game loop status state
   const [status, setStatus] = useState("waiting");
 
-  // set up hidden input input val state
+  // set up hidden input val state
   const [currInput, setCurrInput] = useState("");
   // set up world advancing index
   const [currWordIndex, setCurrWordIndex] = useState(0);
@@ -377,9 +377,19 @@ const TypeBox = ({
 
     // update stats when typing unless there is no effective wpm
     if (wpmKeyStrokes !== 0) {
-      const currWpm =
+
+      let currWpm;
+      if (language === C_MODE || language === CPP_MODE || language === JAVA_MODE || language === PYTHON_MODE) {
+        currWpm = (wpmKeyStrokes  / 4 / (countDownConstant - countDown)) * 60.0;
+        setWpm(currWpm);
+        
+      }
+      else{ 
+        currWpm =
         (wpmKeyStrokes / 5 / (countDownConstant - countDown)) * 60.0;
-      setWpm(currWpm);
+        setWpm(currWpm);
+      }
+      
     }
 
     // start the game by typing any thing
@@ -653,12 +663,12 @@ const TypeBox = ({
   return (
     <div onClick={handleInputFocus}>
       <div className="IconButton-set" style={{position: 'fixed', top: '170px', left: '0', right: '0', margin: '0 auto'}}>
-      <IconButton style={{ marginLeft: '15px', fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => {reset(countDownConstant, ENGLISH_MODE, false);}}><span className={getLanguageButtonClassName(ENGLISH_MODE)}>Default</span></IconButton>
-      <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, C_MODE, false);}}><span className={getLanguageButtonClassName(C_MODE)}>C</span></IconButton>
-      <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, CPP_MODE, false);}}><span className={getLanguageButtonClassName(CPP_MODE)}>C++</span></IconButton>
-      <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, JAVA_MODE, false);}}><span className={getLanguageButtonClassName(JAVA_MODE)}>Java</span></IconButton>
-      <IconButton style={{ marginRight: '15px', fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, PYTHON_MODE, false);}}><span className={getLanguageButtonClassName(PYTHON_MODE)}>Python</span></IconButton>
-    </div>
+        <IconButton style={{ marginLeft: '15px', fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => {reset(countDownConstant, ENGLISH_MODE, false);}}><span className={getLanguageButtonClassName(ENGLISH_MODE)}>Default</span></IconButton>
+        <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, C_MODE, false);}}><span className={getLanguageButtonClassName(C_MODE)}>C</span></IconButton>
+        <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, CPP_MODE, false);}}><span className={getLanguageButtonClassName(CPP_MODE)}>C++</span></IconButton>
+        <IconButton style={{fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, JAVA_MODE, false);}}><span className={getLanguageButtonClassName(JAVA_MODE)}>Java</span></IconButton>
+        <IconButton style={{ marginRight: '15px', fontFamily:"Lexend Deca", fontWeight:"600"}} onClick={() => { reset(countDownConstant, PYTHON_MODE, false);}}><span className={getLanguageButtonClassName(PYTHON_MODE)}>Python</span></IconButton>
+      </div>
 
       <CapsLockSnackbar open={capsLocked}></CapsLockSnackbar>
       {language === ENGLISH_MODE && (
@@ -883,7 +893,7 @@ const TypeBox = ({
                 </IconButton>
                 <IconButton onClick={() => {
                   setPacingStyle(smoothCaret);
-                }} style = {{display: ''}}>
+                }} style = {{display: 'none'}}>
                     <span
                       className={getPacingStyleButtonClassName(smoothCaret)}
                     >
