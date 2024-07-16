@@ -48,7 +48,7 @@ const TypeBox = ({
     "timer-constant"
   );
 
-
+  
 
   // local persist pacing style
   const [pacingStyle, setPacingStyle] = useLocalPersistState(
@@ -60,11 +60,6 @@ const TypeBox = ({
     ENGLISH_MODE,
     "language"
   );
-
-  
-  
-  
-
 
   // Caps Lock
   const [capsLocked, setCapsLocked] = useState(false);
@@ -489,7 +484,6 @@ const TypeBox = ({
       return null;
     }
     if (isCorrect) {
-      // console.log("detected match");
       wordsCorrect.add(currWordIndex);
       wordsInCorrect.delete(currWordIndex);
       let inputWordsHistoryUpdate = { ...inputWordsHistory };
@@ -539,10 +533,6 @@ const TypeBox = ({
   
  
 
- 
-  
-
-
   const getCharClassName = (wordIdx, charIdx, char, word) => {
     const keyString = wordIdx + "." + charIdx;
     if (
@@ -553,14 +543,7 @@ const TypeBox = ({
     ) {
       return "caret-char-left";
     }
-    if (
-      pacingStyle === smoothCaret &&
-      wordIdx === currWordIndex &&
-      charIdx === currCharIndex + 1 &&
-      status !== "finished"
-    ) {
-      return "smooth-current-char";
-    }
+    
 
     if (history[keyString] === true) {
       if (
@@ -627,15 +610,6 @@ const TypeBox = ({
       return "char";
     }
   };
-
-  
-
-  const nextLetter = document.querySelector('.smooth-current-char');
-  const nextWord = document.querySelector('.word active-word-no-pulse');
-  const smoothcaret = document.querySelector('.smooth-caret'); 
-  const lastLetter = document.querySelector('.smooth-char-right-correct');
-
-  
 
   
 
@@ -923,7 +897,7 @@ const TypeBox = ({
             boxShadow: "none",
           },
         }}
-        open={openRestart}
+        open={openRestart}  
         onKeyDown={EnterkeyPressReset}
       >
         <DialogTitle>

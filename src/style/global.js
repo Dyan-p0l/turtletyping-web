@@ -393,25 +393,6 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.text};
     padding-right: 4px;
   }
-  .sentence-char{
-    color: ${({ theme }) => theme.textTypeBox};
-  }
-  .correct-sentence-char{
-    color: ${({ theme }) => theme.text};
-  }
-  .sentence-input-field{
-    color: ${({ theme }) => theme.textTypeBox};
-    font-size: 28px;
-    background: transparent;
-    border: none;
-    caret-color: ${({ theme }) => theme.stats};
-    outline: none;
-    padding: 0;
-    font-family: ${({ theme }) => theme.fontFamily};
-  }
-  .sentence-display-field{
-    font-size: 28px;
-  }
   .wordcard-word-display-field{
     font-size: 64px;
     margin: 40px;
@@ -514,19 +495,7 @@ export const GlobalStyles = createGlobalStyle`
     color: ${({ theme }) => theme.text};
     opacity: 0.8;
   }
-  .VIBRATE {
-    background-color: ${({ theme }) => theme.textTypeBox};
-      -webkit-animation: vibrate-1 0.8s linear infinite both;
-            animation: vibrate-1 0.8s linear infinite both;
-  }
-  .VIBRATE-ERROR {
-     background-color: red;
-      -webkit-animation: vibrate-1 0.2s linear infinity both;
-            animation: vibrate-1 0.2s linear infinity both;
-  }
-  .NOVIBRATE-CORRECT {
-    background-color: ${({ theme }) => theme.textTypeBox};
- }
+  
 
   @keyframes vibrate-1 {
     0% {
